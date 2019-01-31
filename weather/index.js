@@ -5,7 +5,9 @@ const xmlToJson = require('xml-to-json-stream')
 const format = require('format-json-stream')
 
 const inputPath = process.argv[2]
-const outputPath = process.argv[3]
+let outputPath = process.argv[3]
+
+if (!outputPath) outputPath = inputPath.slice(0, -3) + 'json'
 
 const parser = xmlToJson()
 const streamConvert = parser.createStream()
