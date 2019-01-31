@@ -3,7 +3,6 @@ const fs = require('fs')
 const util = require('util')
 const parseString = require('xml2js').parseString
 
-
 let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <current>
   <city id="2643741" name="City of London">
@@ -26,64 +25,57 @@ let xml = `<?xml version="1.0" encoding="UTF-8"?>
 </current>`
 
 let output
-parseString(xml, {trim: true}, (err, result) => {
-    // console.log(util.inspect(result, {showHidden: false, depth: null}))
-    output = result.current
+parseString(xml, { trim: true }, (err, result) => {
+  // console.log(util.inspect(result, {showHidden: false, depth: null}))
+  output = result.current
 })
 
 // console.log(output)
 // console.log(util.inspect(output, {showHidden: false, depth: null}))
 
 const subkey = async (data, key) => {
-    data[key].forEach(element => {
-        console.log(element)
-        for(const subkey of Object.keys(element)) {
-            // console.log('sib-key',element[subkey])
-            console.log(subkey)
-            if(subkey === '$') data[key] = element[subkey]
-            else data[key][subkey] = element[subkey]
-        }
-
-    })
-    return data
+  data[key].forEach(element => {
+    console.log(element)
+    for (const subkey of Object.keys(element)) {
+      // console.log('sib-key',element[subkey])
+      console.log(subkey)
+      if (subkey === '$') data[key] = element[subkey]
+      else data[key][subkey] = element[subkey]
+      // if(data[key][subkey]) data[key][subkey] = await subkey(data[key][subkey], subkey)
+    }
+  })
+  return data
 }
 
 const transform = async () => {
-    for (const key of Object.keys(output)) {
-        // console.log(key, output[key])
-        // output[key] = output[key][0]['coord']
-        console.log(key, output[key])
-        // console.log(typeof(output[key]), output[key])
-        // output[key].forEach(element => {
-        //     console.log(element)
-        //     for(const subkey of Object.keys(element)) {
-        //         console.log('sib-key',element[subkey])
-        //         if(subkey === '$') output[key] = element[subkey]
-        //         else output[key][subkey] = element[subkey]
-        //     }
-    
-        // })
-        output = await subkey(output, key)
-        // for(const subkey of Object.keys(output[key][0]['$'])) {
-        //     console.log(subkey)
-        // }
-        // if(output[key][0]) {
-        //     for(const subkey of Object.keys(output[key][0])) {
-        //         if(output[key][subkey]) console.log(subkey, output[key][subkey])
-        //     }
-        // }
-        // console.log(output[key][0])
-        // console.log(output[key][0]['$'])
-    }
+  for (const key of Object.keys(output)) {
+    // console.log(key, output[key])
+    // output[key] = output[key][0]['coord']
+    console.log(key, output[key])
+    // console.log(typeof(output[key]), output[key])
+    // output[key].forEach(element => {
+    //     console.log(element)
+    //     for(const subkey of Object.keys(element)) {
+    //         console.log('sib-key',element[subkey])
+    //         if(subkey === '$') output[key] = element[subkey]
+    //         else output[key][subkey] = element[subkey]
+    //     }
+
+    // })
+    output = await subkey(output, key)
+    // for(const subkey of Object.keys(output[key][0]['$'])) {
+    //     console.log(subkey)
+    // }
+    // if(output[key][0]) {
+    //     for(const subkey of Object.keys(output[key][0])) {
+    //         if(output[key][subkey]) console.log(subkey, output[key][subkey])
+    //     }
+    // }
+    // console.log(output[key][0])
+    // console.log(output[key][0]['$'])
+  }
 }
 // console.log(output)
-transform().then(() => console.log(util.inspect(output, {showHidden: false, depth: null})))
+transform().then(() => console.log(util.inspect(output, { showHidden: false, depth: null })))
 
 // console.log(util.inspect(output, {showHidden: false, depth: null}))
-
-
-
-
-
-
-
