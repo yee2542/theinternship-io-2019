@@ -34,49 +34,47 @@ parseString(xml, { trim: true }, (err, result) => {
 // console.log(output)
 // console.log(util.inspect(output, {showHidden: false, depth: null}))
 
+// const flatMap$ = (arr, root) => {
+//   let result = {}
+//   if (arr[0]['$']) result[root] = arr[0]['$']
+//   else
+// }
+
 const subkey = async (data, key) => {
+  if (!key) {
+    console.log(util.inspect(data, { showHidden: false, depth: null }))
+    return data
+  }
   data[key].forEach(element => {
     console.log(element)
     for (const subkey of Object.keys(element)) {
-      // console.log('sib-key',element[subkey])
-      console.log(subkey)
-      if (subkey === '$') data[key] = element[subkey]
-      else data[key][subkey] = element[subkey]
-      // if(data[key][subkey]) data[key][subkey] = await subkey(data[key][subkey], subkey)
+      if (subkey === '$') {
+        console.log('$ -->', element[subkey])
+        data[key] = element[subkey]
+      } else {
+        console.log('not $ -->', element[subkey])
+        data[key][subkey] = element[subkey]
+      }
     }
   })
+  console.log(util.inspect(data, { showHidden: false, depth: null }))
   return data
 }
 
 const transform = async () => {
   for (const key of Object.keys(output)) {
-    // console.log(key, output[key])
-    // output[key] = output[key][0]['coord']
-    console.log(key, output[key])
-    // console.log(typeof(output[key]), output[key])
-    // output[key].forEach(element => {
-    //     console.log(element)
-    //     for(const subkey of Object.keys(element)) {
-    //         console.log('sib-key',element[subkey])
-    //         if(subkey === '$') output[key] = element[subkey]
-    //         else output[key][subkey] = element[subkey]
-    //     }
-
-    // })
     output = await subkey(output, key)
-    // for(const subkey of Object.keys(output[key][0]['$'])) {
-    //     console.log(subkey)
-    // }
-    // if(output[key][0]) {
-    //     for(const subkey of Object.keys(output[key][0])) {
-    //         if(output[key][subkey]) console.log(subkey, output[key][subkey])
-    //     }
-    // }
-    // console.log(output[key][0])
-    // console.log(output[key][0]['$'])
+    for (const subkey of Object.keys(output[key])) {
+      console.log('subkey--->',subkey)
+    }
   }
 }
 // console.log(output)
-transform().then(() => console.log(util.inspect(output, { showHidden: false, depth: null })))
+// transform().then(() => console.log(util.inspect(output, { showHidden: false, depth: null })))
+
+const parserrrr = require('xml2json')
+var json = parserrrr.toJson(xml);
+console.log("to json -> %s", json);
+console.log(JSON.parse(json).current)
 
 // console.log(util.inspect(output, {showHidden: false, depth: null}))
