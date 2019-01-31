@@ -40,10 +40,10 @@ class GameSession {
     this.word = ''
     this.game = {
       hint: '',
-      word: '',
+      word: [],
       maxWrong: 0,
-      guessed: [],
-      ans: ''
+      wrongGuessed: [],
+      ans: []
     }
   }
 
@@ -53,11 +53,18 @@ class GameSession {
     this.list = [...this.list.splice(0, get), ...this.list.splice(get, this.list.length)]
 
     this.game.hint = q.h
-    this.game.word = q.a
+    this.game.word = q.a.split('')
+    this.game.ans = '_'.repeat(q.a.length).split('')
+    this.game.wrongGuessed = []
     this.game.maxWrong = 0
 
     return q
   }
+
+  startGame() {
+    //   const
+  }
+
 }
 
 async function main () {
