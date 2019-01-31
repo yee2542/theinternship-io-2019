@@ -4,7 +4,7 @@
 
 ### Prerequisites
 
-Node JS 11.7.0 หริือเทียบเท่า
+Node JS 11.7.0 หรือเทียบเท่า
 
 format-json-stream : ^0.1.5
 
