@@ -16,5 +16,7 @@
     "url": "https://github.com/yee2542/theinternship-io-2019/"
   },
   "homepage": "https://github.com/yee2542/theinternship-io-2019#readme",
-  "dependencies": {}
+  "dependencies": {
+    "inquirer": "^6.2.2"
+  }
 }
