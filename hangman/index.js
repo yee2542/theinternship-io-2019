@@ -45,6 +45,13 @@ class GameSession {
       guessed: []
     }
   }
+
+  getQuestion () {
+    const get = Math.floor(Math.random() * this.list.length)
+    const q = this.list[get]
+    this.list = [...this.list.splice(0, get), ...this.list.splice(get, this.list.length)]
+    return q
+  }
 }
 
 async function main () {
@@ -65,6 +72,8 @@ async function main () {
       const cid = wordlists.categories.findIndex(s => s.name === ans.categories)
       gameSession = new GameSession(wordlists.getQuestionList(cid))
 
+      console.log(gameSession.getQuestion())
+      console.log(gameSession.getQuestion())
       console.log(gameSession)
     })
 }
