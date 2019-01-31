@@ -27,6 +27,7 @@ let xml = `<?xml version="1.0" encoding="UTF-8"?>
 let output
 parseString(xml, { trim: true }, (err, result) => {
   // console.log(util.inspect(result, {showHidden: false, depth: null}))
+  if (err) throw new Error(err)
   output = result.current
 })
 
