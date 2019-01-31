@@ -17,33 +17,55 @@ function loadFileGame () {
 class Wordlists {
   constructor (data) {
     this.wordlists = data
+    this.categories = this.getCategoriesName(this.wordlists)
   }
 
-  getCategories () {
+  getCategoriesName () {
     let categories = []
     this.wordlists.categories.forEach(element => {
-      categories.push(element.name)
+      categories.push(element)
     })
     return categories
+  }
+
+  getQuestionList (catID) {
+    return this.wordlists.categories[catID].lists
+  }
+}
+
+class GameSession {
+  constructor (list) {
+    this.list = list
+    this.score = 0
+    this.word = ''
+    this.game = {
+      hint: '',
+      word: '',
+      maxWrong: 0,
+      guessed: []
+    }
   }
 }
 
 async function main () {
   const data = await loadFileGame()
   const wordlists = new Wordlists(data)
-  console.log(wordlists.getCategories())
-  console.log(wordlists)
+  let gameSession
+  //   console.log(wordlists.getQuestionList(0))
 
   inquirer.prompt([
     {
       name: 'categories',
       type: 'list',
       message: 'select category',
-      choices: ['test']
+      choices: wordlists.categories
     }
   ])
     .then(ans => {
-      console.log(ans)
+      const cid = wordlists.categories.findIndex(s => s.name === ans.categories)
+      gameSession = new GameSession(wordlists.getQuestionList(cid))
+
+      console.log(gameSession)
     })
 }
 
