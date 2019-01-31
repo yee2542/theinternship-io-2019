@@ -5,19 +5,19 @@
         "lists": [
           {
             "a": "AAA",
-            "h": "A#"
+            "h": "AA"
           },
           {
-            "a": "AAsaaA",
-            "h": "Asa#"
+            "a": "A",
+            "h": "AAA#"
           },
           {
-            "a": "AAsaaA",
-            "h": "Asa#"
+            "a": "A",
+            "h": "AAB#"
           },
           {
-            "a": "AAsaaA",
-            "h": "Asa#"
+            "a": "AAA",
+            "h": "BBB#"
           }
         ]
       },

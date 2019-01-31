@@ -47,7 +47,7 @@ class GameSession {
     }
   }
 
-  getQuestion () {
+  getNewQuestion () {
     const get = Math.floor(Math.random() * this.list.length)
     const q = this.list[get]
     this.list = [...this.list.splice(0, get), ...this.list.splice(get, this.list.length)]
@@ -58,11 +58,22 @@ class GameSession {
     this.game.wrongGuessed = []
     this.game.maxWrong = q.a.length + Math.floor(Math.random() * Math.floor(6))
 
-    return q
+    return this.game.ans
   }
 
   answer (alphabet) {
-    return alphabet
+    const found = this.game.word.find(a => a === alphabet)
+    const position = this.game.word.indexOf(found)
+    console.log('--->',found)
+    if (found) {
+      console.log('ccccc')
+      this.game.ans[position] = this.game.word[position]
+      this.game.word[position] = '-'
+    } else {
+      console.log('ffffff')
+      this.game.wrongGuessed.push(alphabet)
+    }
+    return this
   }
 }
 
@@ -84,9 +95,15 @@ async function main () {
       const cid = wordlists.categories.findIndex(s => s.name === ans.categories)
       gameSession = new GameSession(wordlists.getQuestionList(cid))
 
-      console.log(gameSession.getQuestion())
-      console.log(gameSession.getQuestion())
+      //   console.log(gameSession.getQuestion())
+      console.log(gameSession.getNewQuestion())
+      console.log(gameSession.answer('A'))
+      console.log(gameSession.answer('A'))
       console.log(gameSession)
+
+    //   inquirer.prompt(gameSession.getQuestion(), (ans) => {
+      // gameSession.answer(ans)
+    //   })
     })
 }
 
