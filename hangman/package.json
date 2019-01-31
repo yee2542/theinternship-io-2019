@@ -1,0 +1,22 @@
+{
+  "name": "hangman",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yee2542/theinternship-io-2019.git"
+  },
+  "author": "Korbboon Thuswongsa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yee2542/theinternship-io-2019/"
+  },
+  "homepage": "https://github.com/yee2542/theinternship-io-2019#readme",
+  "dependencies": {
+    "xml2js": "^0.4.19"
+  }
+}
