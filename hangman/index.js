@@ -56,15 +56,14 @@ class GameSession {
     this.game.word = q.a.split('')
     this.game.ans = '_'.repeat(q.a.length).split('')
     this.game.wrongGuessed = []
-    this.game.maxWrong = 0
+    this.game.maxWrong = q.a.length + Math.floor(Math.random() * Math.floor(6))
 
     return q
   }
 
-  startGame() {
-    //   const
+  answer (alphabet) {
+    return alphabet
   }
-
 }
 
 async function main () {
