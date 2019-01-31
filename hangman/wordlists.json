@@ -4,22 +4,18 @@
         "name": "euei",
         "lists": [
           {
-            "q": "1",
             "a": "AAA",
             "h": "A#"
           },
           {
-            "q": "2????",
             "a": "AAsaaA",
             "h": "Asa#"
           },
           {
-            "q": "3??saa???",
             "a": "AAsaaA",
             "h": "Asa#"
           },
           {
-            "q": "4??saa???",
             "a": "AAsaaA",
             "h": "Asa#"
           }
@@ -29,7 +25,6 @@
         "name": "euei2",
         "lists": [
           {
-            "q": "?????",
             "a": "AAA",
             "h": "A#"
           }

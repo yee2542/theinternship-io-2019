@@ -42,7 +42,8 @@ class GameSession {
       hint: '',
       word: '',
       maxWrong: 0,
-      guessed: []
+      guessed: [],
+      ans: ''
     }
   }
 
@@ -50,6 +51,11 @@ class GameSession {
     const get = Math.floor(Math.random() * this.list.length)
     const q = this.list[get]
     this.list = [...this.list.splice(0, get), ...this.list.splice(get, this.list.length)]
+
+    this.game.hint = q.h
+    this.game.word = q.a
+    this.game.maxWrong = 0
+
     return q
   }
 }
