@@ -52,7 +52,7 @@ class GameSession {
   getNewQuestion () {
     const get = Math.floor(Math.random() * this.list.length)
     const q = this.list[get]
-    this.list = [...this.list.splice(0, get), ...this.list.splice(get, this.list.length)]
+    this.list = [...this.list.splice(0, get), ...this.list.splice(get, this.list.length - 1)]
 
     console.log(q)
     console.log(this.list)
@@ -110,6 +110,11 @@ class GameSession {
   }
 
   answer (alphabet) {
+    if (!this.list[0]) {
+      console.log('run out of guessed list !')
+      return -1
+    }
+
     const found = this.game.word.find(a => a.toLowerCase() === alphabet.toLowerCase())
     const position = this.game.word.indexOf(found)
     this.game.round++
@@ -192,6 +197,10 @@ async function main () {
   }
 
   async function nextGame () {
+    let choices = ['next', 'select category', 'exit']
+    if (!gameSession.list[0]) {
+      choices.shift()
+    }
     return inquirer.prompt([
       {
         name: 'next',
