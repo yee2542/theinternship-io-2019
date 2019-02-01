@@ -37,13 +37,14 @@ class GameSession {
   constructor (list) {
     this.list = list
     this.score = 0
-    this.word = ''
     this.game = {
       hint: '',
       word: [],
       maxWrong: 0,
       wrongGuessed: [],
-      ans: []
+      ans: [],
+      state: '',
+      round: 0
     }
   }
 
@@ -52,6 +53,8 @@ class GameSession {
     const q = this.list[get]
     this.list = [...this.list.splice(0, get), ...this.list.splice(get, this.list.length)]
 
+    this.game.round = 0
+    this.game.state = ''
     this.game.hint = q.h
     this.game.word = q.a.split('')
     this.game.ans = '_'.repeat(q.a.length).split('')
@@ -61,24 +64,49 @@ class GameSession {
     return this.game.ans
   }
 
+  getQuestion () {
+    return this.game.ans
+  }
+
+  getWrongGuessed () {
+    return this.game.wrongGuessed
+  }
+
   getHint () {
     return this.game.hint
+  }
+
+  setSessionState () {
+    if (this.game.round > this.game.maxWrong) this.game.state = false
+    // else if (this.game.ans.length === this.game.ans.length) this.game.state = 'win'
+    else this.game.state = true
+    // else this.game.state = true
+  }
+
+  getSessionSate () {
+    return this.game.state
   }
 
   answer (alphabet) {
     const found = this.game.word.find(a => a.toLowerCase() === alphabet.toLowerCase())
     const position = this.game.word.indexOf(found)
+    this.game.round++
     console.log('--->', found)
     if (found) {
       console.log('ccccc')
       this.game.ans[position] = this.game.word[position]
       this.game.word[position] = '-'
-      return true
     } else {
       console.log('ffffff')
-      this.game.wrongGuessed.push(alphabet)
-      return false
+      const wrongDuplicated = this.game.wrongGuessed.find(a => a.toLowerCase() === alphabet.toLowerCase())
+      if (wrongDuplicated) {
+        console.log('you haved wrong guessed character')
+        this.game.state++
+      } else this.game.wrongGuessed.push(alphabet)
+      //   if (this.game.wrongGuessed.length === this.game.maxWrong) this.game.state = false
     }
+    this.setSessionState()
+    return this.game.maxWrong - this.game.wrongGuessed.length
   }
 }
 
@@ -100,9 +128,10 @@ async function main () {
       const cid = wordlists.categories.findIndex(s => s.name === ans.categories)
       inquirer.registerPrompt('answer', ans)
       gameSession = new GameSession(wordlists.getQuestionList(cid))
+      console.log(gameSession)
     })
   }
-  async function getQuestion () {
+  async function getNewQuestion () {
     return inquirer.prompt([
       {
         type: 'input',
@@ -113,12 +142,33 @@ async function main () {
       }
     ]).then(ans => {
       console.log(ans)
-      gameSession.answer(ans.answer)
+      return gameSession.answer(ans.answer)
+    })
+  }
+  async function getQuestion () {
+    return inquirer.prompt([
+      {
+        type: 'input',
+        name: 'answer',
+        message: `
+        hint : ${gameSession.getHint()}
+        your guess ${gameSession.getQuestion()} wrong guessed : ${gameSession.getWrongGuessed()}
+        `
+      }
+    ]).then(ans => {
+      console.log('ane--->', ans)
+      return gameSession.answer(ans.answer)
     })
   }
 
   await selectCategory()
-  await getQuestion()
+  await getNewQuestion()
+  let gameState = gameSession.getSessionSate()
+  while (gameState || true) {
+    gameState = await getQuestion()
+    console.log(gameState)
+    console.log(gameSession)
+  }
   console.log(gameSession)
 
 //   console.log(gameSession)
