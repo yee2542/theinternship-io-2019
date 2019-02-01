@@ -79,11 +79,13 @@ class GameSession {
   }
 
   checkAnswer () {
+    let count = 0
     this.game.ans.forEach(a => {
-        console.log(a)
-      if (a !== '_') return true
+      console.log(a)
+      if (a !== '_') count++
     })
-    return false
+    if (count === this.game.word.length) return true
+    else return false
   }
 
   setSessionState () {
