@@ -78,6 +78,10 @@ class GameSession {
     return this.game.hint
   }
 
+  getLeftGuess () {
+      return this.game.maxWrong - this.game.round
+  }
+
   checkAnswer () {
     let count = 0
     this.game.ans.forEach(a => {
@@ -90,15 +94,12 @@ class GameSession {
 
   setSessionState () {
     if (this.game.round >= this.game.maxWrong) this.game.state = false
-    // else if (this.game.ans.length === this.game.ans.length) this.game.state = 'win'
     else this.game.state = true
 
     const ans = this.checkAnswer()
-    // console.log('ans', ans)
     if (this.game.result === 'next' &&
     this.game.state && ans) this.game.result = 'win'
     else if (!this.game.state) this.game.result = 'lose'
-    // else this.game.state = true
   }
 
   getSessionSate () {
@@ -115,13 +116,13 @@ class GameSession {
       this.score++
       this.game.ans[position] = this.game.word[position]
       this.game.word[position] = '-'
+      this.game.round--
     } else {
     //   console.log('ffffff')
       const wrongDuplicated = this.game.wrongGuessed.find(a => a.toLowerCase() === alphabet.toLowerCase())
       if (wrongDuplicated) {
         console.log('you haved wrong guessed character')
-        this.game.state++
-        this.game.round--
+        // this.game.state++
       } else {
         if (this.score > 0) this.score--
         this.game.wrongGuessed.push(alphabet)
@@ -161,7 +162,9 @@ async function main () {
         name: 'answer',
         message: `
         hint : ${gameSession.getHint()}
-        your guess ${gameSession.getNewQuestion()}`
+        your guess ${gameSession.getNewQuestion()}
+        you have ${gameSession.getLeftGuess()} tries
+        `
       }
     ]).then(ans => {
       console.log(ans)
@@ -176,6 +179,7 @@ async function main () {
         message: `
         hint : ${gameSession.getHint()}
         your guess ${gameSession.getQuestion()} wrong guessed : ${gameSession.getWrongGuessed()}
+        you have ${gameSession.getLeftGuess()} tries
         `
       }
     ]).then(ans => {
@@ -215,7 +219,6 @@ async function main () {
     exit: false,
     newCategory: true
   }
-  //   let gameState = gameSession.getSessionSate()
   while (!next.exit) {
     if (next.newCategory) {
       console.log('select new cat')
@@ -231,9 +234,7 @@ async function main () {
     next = await nextGame()
     console.log(next)
   }
-  console.log(next)
-  console.log(gameSession)
-
+//   console.log(next)
 //   console.log(gameSession)
 }
 
