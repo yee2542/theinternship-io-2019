@@ -54,9 +54,6 @@ class GameSession {
     const q = this.list[get]
     this.list = [...this.list.splice(0, get), ...this.list.splice(get, this.list.length - 1)]
 
-    console.log(q)
-    console.log(this.list)
-
     this.game.result = 'next'
     this.game.round = 0
     this.game.state = true
@@ -110,27 +107,19 @@ class GameSession {
   }
 
   answer (alphabet) {
-    if (!this.list[0]) {
-      console.log('run out of guessed list !')
-      return -1
-    }
-
+    console.log(this)
     const found = this.game.word.find(a => a.toLowerCase() === alphabet.toLowerCase())
     const position = this.game.word.indexOf(found)
     this.game.round++
-    // console.log('--->', found)
     if (found) {
-    //   console.log('ccccc')
       this.score++
       this.game.ans[position] = this.game.word[position]
       this.game.word[position] = '-'
       this.game.round--
     } else {
-    //   console.log('ffffff')
       const wrongDuplicated = this.game.wrongGuessed.find(a => a.toLowerCase() === alphabet.toLowerCase())
       if (wrongDuplicated) {
         console.log('you haved wrong guessed character')
-        // this.game.state++
       } else {
         if (this.score > 0) this.score--
         this.game.wrongGuessed.push(alphabet)
@@ -156,11 +145,10 @@ async function main () {
       }
     ]).then(ans => {
       const cid = wordlists.categories.findIndex(s => s.name === ans.categories)
-      //   inquirer.registerPrompt('answer', ans)
       return cid
-    //   console.log(gameSession)
     }).then(cid => {
-      gameSession = new GameSession(wordlists.getQuestionList(cid))
+      const data = wordlists.getQuestionList(cid)
+      gameSession = new GameSession(data)
     })
   }
   async function getNewQuestion () {
@@ -191,7 +179,6 @@ async function main () {
         `
       }
     ]).then(ans => {
-    //   console.log('ane--->', ans)
       return gameSession.answer(ans.answer)
     })
   }
@@ -206,7 +193,7 @@ async function main () {
         name: 'next',
         type: 'list',
         message: 'select category',
-        choices: ['next', 'select category', 'exit']
+        choices: choices
       }
     ]).then(ans => {
       let state = {
@@ -233,32 +220,18 @@ async function main () {
   }
   while (!next.exit) {
     if (next.newCategory) {
-    //   console.log('select new cat')
       await selectCategory()
     }
     await getNewQuestion()
     while (gameSession.game.result === 'next') {
       await getQuestion()
-    //   console.log(gameSession)
     }
     if (gameSession.game.result === 'win') console.log('you win !')
     else console.log('try next')
     next = await nextGame()
-    // console.log(next)
+    console.log(next)
   }
   console.log('bye ~')
 }
 
 main()
-
-// inquirer.prompt([
-//   {
-//     name: 'name',
-//     type: 'list',
-//     message: 'select category',
-//     choices: ['euei', 'euei']
-//   }
-// ])
-//   .then(ans => {
-//     console.log(ans)
-//   })
