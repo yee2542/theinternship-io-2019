@@ -1,23 +1,27 @@
 {
     "categories": [
       {
-        "name": "euei",
+        "name": "Animal",
         "lists": [
           {
-            "a": "AAA",
-            "h": "AA"
+            "a": "pig",
+            "h": "for made bacon"
           },
           {
-            "a": "A",
-            "h": "AAA#"
+            "a": "bird",
+            "h": "can fly"
           },
           {
-            "a": "A",
-            "h": "AAB#"
+            "a": "snake",
+            "h": "slytherin"
           },
           {
-            "a": "AAA",
-            "h": "BBB#"
+            "a": "dog",
+            "h": "can bark"
+          },
+          {
+            "a": "cat",
+            "h": "rule the world"
           }
         ]
       },
