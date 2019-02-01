@@ -4,23 +4,23 @@
         "name": "Animal",
         "lists": [
           {
-            "a": "pig",
+            "a": "Pig",
             "h": "for made bacon"
           },
           {
-            "a": "bird",
+            "a": "Bird",
             "h": "can fly"
           },
           {
-            "a": "snake",
+            "a": "Snake",
             "h": "slytherin"
           },
           {
-            "a": "dog",
+            "a": "Dog",
             "h": "can bark"
           },
           {
-            "a": "cat",
+            "a": "Cat",
             "h": "rule the world"
           }
         ]
@@ -29,12 +29,49 @@
         "name": "Food",
         "lists": [
           {
-            "a": "noodle",
+            "a": "Noodle",
             "h": "quick n' easy origin from japan"
           },
           {
-            "a": "steak",
+            "a": "Steak",
             "h": "made from meat, always in fine dinning"
+          },
+          {
+            "a": "Salad",
+            "h": "full of vagetable"
+          },
+          {
+            "a": "Bread",
+            "h": "morning breakfast, made from wheat flour"
+          },
+          {
+            "a": "Eggs",
+            "h": "perfect breakfast when serve with bacon"
+          }
+        ]
+      },
+      {
+        "name": "Movies",
+        "lists": [
+          {
+            "a": "HarryPotter",
+            "h": "boy who have lightning on head, survived from you know who"
+          },
+          {
+            "a": "TheHungerGames",
+            "h": "district 12"
+          },
+          {
+            "a": "TheMartian",
+            "h": "140M Miles"
+          },
+          {
+            "a": "Zootopia",
+            "h": "city of variety animal, from Walt Disney"
+          },
+          {
+            "a": "Deadpool",
+            "h": "bad hero red man 2016"
           }
         ]
       }
