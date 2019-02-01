@@ -71,7 +71,7 @@ class GameSession {
     let hintWord = this.game.word.length
     while (hintWord > 0) {
       hint()
-      hintWord = Math.floor(hintWord / 5)
+      hintWord = Math.floor(hintWord / 4)
     }
 
     return this.game.ans
@@ -96,7 +96,6 @@ class GameSession {
   checkAnswer () {
     let count = 0
     this.game.ans.forEach(a => {
-    //   console.log(a)
       if (a !== '_') count++
     })
     if (count === this.game.word.length) return true
@@ -118,7 +117,6 @@ class GameSession {
   }
 
   answer (alphabet) {
-    console.log(this)
     const found = this.game.word.find(a => a.toLowerCase() === alphabet.toLowerCase())
     const position = this.game.word.indexOf(found)
     this.game.round++
@@ -174,7 +172,6 @@ async function main () {
         `
       }
     ]).then(ans => {
-    //   console.log(ans)
       return gameSession.answer(ans.answer)
     })
   }
@@ -240,7 +237,6 @@ async function main () {
     if (gameSession.game.result === 'win') console.log('you win !')
     else console.log('try next')
     next = await nextGame()
-    console.log(next)
   }
   console.log('bye ~')
 }
