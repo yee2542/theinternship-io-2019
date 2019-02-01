@@ -89,18 +89,15 @@ class GameSession {
   }
 
   setSessionState () {
-    if (this.game.round > this.game.maxWrong) this.game.state = false
+    if (this.game.round >= this.game.maxWrong) this.game.state = false
     // else if (this.game.ans.length === this.game.ans.length) this.game.state = 'win'
     else this.game.state = true
 
     const ans = this.checkAnswer()
-    console.log('ans', ans)
+    // console.log('ans', ans)
     if (this.game.result === 'next' &&
-    this.game.state === false &&
-    this.game.ans === this.game.word &&
-    ans
-    ) this.game.result = 'lose'
-    else this.game.result = 'win'
+    this.game.state && ans) this.game.result = 'win'
+    else if (!this.game.state) this.game.result = 'lose'
     // else this.game.state = true
   }
 
