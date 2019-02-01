@@ -160,6 +160,13 @@ async function main () {
       gameSession = new GameSession(data)
     })
   }
+  const inputValidator = (input) => {
+    return new Promise((resolve, reject) => {
+      console.log(input)
+      if (input.length > 0 && input !== ' ' && input.match(/^[0-9a-zA-Z]+$/)) resolve(input)
+      else reject(new Error('error input'))
+    })
+  }
   async function getNewQuestion () {
     return inquirer.prompt([
       {
@@ -169,7 +176,8 @@ async function main () {
         your guess ${gameSession.getNewQuestion()}
         hint : ${gameSession.getHint()}
         you have ${gameSession.getLeftGuess()} tries
-        `
+        `,
+        filter: inputValidator
       }
     ]).then(ans => {
       return gameSession.answer(ans.answer)
@@ -184,7 +192,8 @@ async function main () {
         your guess ${gameSession.getQuestion()} wrong guessed : ${gameSession.getWrongGuessed()}
         hint : ${gameSession.getHint()}
         you have ${gameSession.getLeftGuess()} tries
-        `
+        `,
+        filter: inputValidator
       }
     ]).then(ans => {
       return gameSession.answer(ans.answer)
