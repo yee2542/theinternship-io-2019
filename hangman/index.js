@@ -61,19 +61,24 @@ class GameSession {
     return this.game.ans
   }
 
+  getHint () {
+    return this.game.hint
+  }
+
   answer (alphabet) {
-    const found = this.game.word.find(a => a === alphabet)
+    const found = this.game.word.find(a => a.toLowerCase() === alphabet.toLowerCase())
     const position = this.game.word.indexOf(found)
-    console.log('--->',found)
+    console.log('--->', found)
     if (found) {
       console.log('ccccc')
       this.game.ans[position] = this.game.word[position]
       this.game.word[position] = '-'
+      return true
     } else {
       console.log('ffffff')
       this.game.wrongGuessed.push(alphabet)
+      return false
     }
-    return this
   }
 }
 
@@ -83,28 +88,40 @@ async function main () {
   let gameSession
   //   console.log(wordlists.getQuestionList(0))
 
-  inquirer.prompt([
-    {
-      name: 'categories',
-      type: 'list',
-      message: 'select category',
-      choices: wordlists.categories
-    }
-  ])
-    .then(ans => {
+  async function selectCategory () {
+    return inquirer.prompt([
+      {
+        name: 'categories',
+        type: 'list',
+        message: 'select category',
+        choices: wordlists.categories
+      }
+    ]).then(ans => {
       const cid = wordlists.categories.findIndex(s => s.name === ans.categories)
+      inquirer.registerPrompt('answer', ans)
       gameSession = new GameSession(wordlists.getQuestionList(cid))
-
-      //   console.log(gameSession.getQuestion())
-      console.log(gameSession.getNewQuestion())
-      console.log(gameSession.answer('A'))
-      console.log(gameSession.answer('A'))
-      console.log(gameSession)
-
-    //   inquirer.prompt(gameSession.getQuestion(), (ans) => {
-      // gameSession.answer(ans)
-    //   })
     })
+  }
+  async function getQuestion () {
+    return inquirer.prompt([
+      {
+        type: 'input',
+        name: 'answer',
+        message: `
+        hint : ${gameSession.getHint()}
+        your guess ${gameSession.getNewQuestion()}`
+      }
+    ]).then(ans => {
+      console.log(ans)
+      gameSession.answer(ans.answer)
+    })
+  }
+
+  await selectCategory()
+  await getQuestion()
+  console.log(gameSession)
+
+//   console.log(gameSession)
 }
 
 main()
