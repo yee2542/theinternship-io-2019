@@ -180,14 +180,29 @@ async function main () {
     })
   }
 
+  async function nextGame () {
+    return inquirer.prompt([
+      {
+        name: 'next',
+        type: 'list',
+        message: 'select category',
+        choices: ['next', 'select category', 'exit']
+      }
+    ]).then(ans => {
+      console.log(ans)
+    })
+  }
+
   await selectCategory()
   await getNewQuestion()
-  let gameState = gameSession.getSessionSate()
+//   let gameState = gameSession.getSessionSate()
   while (gameSession.game.result === 'next') {
-    gameState = await getQuestion()
-    console.log(gameState)
+    await getQuestion()
     console.log(gameSession)
   }
+  if (gameSession.game.result === 'win') console.log('you win !')
+  else console.log('try next')
+  await nextGame()
   console.log(gameSession)
 
 //   console.log(gameSession)
