@@ -3,6 +3,7 @@ const inquirer = require('inquirer')
 
 // setting
 const PATH = './wordlists.json'
+const HINT = 4
 
 function loadFileGame () {
   return new Promise((resolve, reject) => {
@@ -71,7 +72,7 @@ class GameSession {
     let hintWord = this.game.word.length
     while (hintWord > 0) {
       hint()
-      hintWord = Math.floor(hintWord / 4)
+      hintWord = Math.floor(hintWord / HINT)
     }
 
     return this.game.ans
@@ -108,8 +109,11 @@ class GameSession {
 
     const ans = this.checkAnswer()
     if (this.game.result === 'next' &&
-    this.game.state && ans) this.game.result = 'win'
-    else if (!this.game.state) this.game.result = 'lose'
+    this.game.state && ans) {
+      this.game.result = 'win'
+      const reveal = this.game.ans.join('')
+      console.log(`Yahh is ${reveal}`)
+    } else if (!this.game.state) this.game.result = 'lose'
   }
 
   getSessionSate () {
@@ -128,6 +132,7 @@ class GameSession {
     } else {
       const wrongDuplicated = this.game.wrongGuessed.find(a => a.toLowerCase() === alphabet.toLowerCase())
       if (wrongDuplicated) {
+        this.game.round--
         console.log('you haved wrong guessed character')
       } else {
         if (this.score > 0) this.score--
