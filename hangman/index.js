@@ -112,6 +112,7 @@ class GameSession {
     console.log('--->', found)
     if (found) {
     //   console.log('ccccc')
+      this.score++
       this.game.ans[position] = this.game.word[position]
       this.game.word[position] = '-'
     } else {
@@ -121,7 +122,10 @@ class GameSession {
         console.log('you haved wrong guessed character')
         this.game.state++
         this.game.round--
-      } else this.game.wrongGuessed.push(alphabet)
+      } else {
+        if (this.score > 0) this.score--
+        this.game.wrongGuessed.push(alphabet)
+      }
       //   if (this.game.wrongGuessed.length === this.game.maxWrong) this.game.state = false
     }
     this.setSessionState()
@@ -190,19 +194,21 @@ async function main () {
       }
     ]).then(ans => {
       console.log(ans)
+      return ans.next
     })
   }
 
   await selectCategory()
   await getNewQuestion()
-//   let gameState = gameSession.getSessionSate()
+  //   let gameState = gameSession.getSessionSate()
   while (gameSession.game.result === 'next') {
     await getQuestion()
     console.log(gameSession)
   }
   if (gameSession.game.result === 'win') console.log('you win !')
   else console.log('try next')
-  await nextGame()
+  const next = await nextGame()
+  console.log(next)
   console.log(gameSession)
 
 //   console.log(gameSession)
