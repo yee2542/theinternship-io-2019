@@ -44,7 +44,8 @@ class GameSession {
       wrongGuessed: [],
       ans: [],
       state: '',
-      round: 0
+      round: 0,
+      result: ''
     }
   }
 
@@ -53,8 +54,9 @@ class GameSession {
     const q = this.list[get]
     this.list = [...this.list.splice(0, get), ...this.list.splice(get, this.list.length)]
 
+    this.game.result = 'next'
     this.game.round = 0
-    this.game.state = ''
+    this.game.state = true
     this.game.hint = q.h
     this.game.word = q.a.split('')
     this.game.ans = '_'.repeat(q.a.length).split('')
@@ -76,10 +78,27 @@ class GameSession {
     return this.game.hint
   }
 
+  checkAnswer () {
+    this.game.ans.forEach(a => {
+        console.log(a)
+      if (a !== '_') return true
+    })
+    return false
+  }
+
   setSessionState () {
     if (this.game.round > this.game.maxWrong) this.game.state = false
     // else if (this.game.ans.length === this.game.ans.length) this.game.state = 'win'
     else this.game.state = true
+
+    const ans = this.checkAnswer()
+    console.log('ans', ans)
+    if (this.game.result === 'next' &&
+    this.game.state === false &&
+    this.game.ans === this.game.word &&
+    ans
+    ) this.game.result = 'lose'
+    else this.game.result = 'win'
     // else this.game.state = true
   }
 
@@ -93,15 +112,16 @@ class GameSession {
     this.game.round++
     console.log('--->', found)
     if (found) {
-      console.log('ccccc')
+    //   console.log('ccccc')
       this.game.ans[position] = this.game.word[position]
       this.game.word[position] = '-'
     } else {
-      console.log('ffffff')
+    //   console.log('ffffff')
       const wrongDuplicated = this.game.wrongGuessed.find(a => a.toLowerCase() === alphabet.toLowerCase())
       if (wrongDuplicated) {
         console.log('you haved wrong guessed character')
         this.game.state++
+        this.game.round--
       } else this.game.wrongGuessed.push(alphabet)
       //   if (this.game.wrongGuessed.length === this.game.maxWrong) this.game.state = false
     }
@@ -164,7 +184,7 @@ async function main () {
   await selectCategory()
   await getNewQuestion()
   let gameState = gameSession.getSessionSate()
-  while (gameState || true) {
+  while (gameSession.game.result === 'next') {
     gameState = await getQuestion()
     console.log(gameState)
     console.log(gameSession)
