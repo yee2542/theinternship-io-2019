@@ -193,21 +193,44 @@ async function main () {
         choices: ['next', 'select category', 'exit']
       }
     ]).then(ans => {
-      console.log(ans)
-      return ans.next
+      let state = {
+        exit: false,
+        newCategory: false
+      }
+      switch (ans.next) {
+        case 'next':
+          break
+        case 'exit':
+          state.exit = true
+          break
+        case 'select category':
+          state.newCategory = true
+          break
+      }
+      return state
     })
   }
 
-  await selectCategory()
-  await getNewQuestion()
-  //   let gameState = gameSession.getSessionSate()
-  while (gameSession.game.result === 'next') {
-    await getQuestion()
-    console.log(gameSession)
+  let next = {
+    exit: false,
+    newCategory: true
   }
-  if (gameSession.game.result === 'win') console.log('you win !')
-  else console.log('try next')
-  const next = await nextGame()
+  //   let gameState = gameSession.getSessionSate()
+  while (!next.exit) {
+    if (next.newCategory) {
+      console.log('select new cat')
+      await selectCategory()
+    }
+    await getNewQuestion()
+    while (gameSession.game.result === 'next') {
+      await getQuestion()
+      console.log(gameSession)
+    }
+    if (gameSession.game.result === 'win') console.log('you win !')
+    else console.log('try next')
+    next = await nextGame()
+    console.log(next)
+  }
   console.log(next)
   console.log(gameSession)
 
