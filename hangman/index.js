@@ -113,11 +113,16 @@ class GameSession {
       this.game.result = 'win'
       const reveal = this.game.ans.join('')
       console.log(`Yahh is ${reveal}`)
+      console.log(`score is ${this.score}`)
     } else if (!this.game.state) this.game.result = 'lose'
   }
 
   getSessionSate () {
     return this.game.state
+  }
+
+  getScore () {
+    return this.score
   }
 
   answer (alphabet) {
@@ -168,7 +173,7 @@ async function main () {
   const inputValidator = (input) => {
     return new Promise((resolve, reject) => {
       console.log(input)
-      if (input.length > 0 && input !== ' ' && input.match(/^[0-9a-zA-Z]+$/)) resolve(input)
+      if (input.length == 1 && input !== ' ' && input.match(/^[0-9a-zA-Z]+$/)) resolve(input)
       else reject(new Error('error input'))
     })
   }
@@ -180,7 +185,7 @@ async function main () {
         message: `
         your guess ${gameSession.getNewQuestion()}
         hint : ${gameSession.getHint()}
-        you have ${gameSession.getLeftGuess()} tries
+        you have ${gameSession.getLeftGuess()} tries, score : ${gameSession.getScore()}
         `,
         filter: inputValidator
       }
@@ -196,7 +201,7 @@ async function main () {
         message: `
         your guess ${gameSession.getQuestion()} wrong guessed : ${gameSession.getWrongGuessed()}
         hint : ${gameSession.getHint()}
-        you have ${gameSession.getLeftGuess()} tries
+        you have ${gameSession.getLeftGuess()} tries, score : ${gameSession.getScore()}
         `,
         filter: inputValidator
       }
