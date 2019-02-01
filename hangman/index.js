@@ -54,12 +54,15 @@ class GameSession {
     const q = this.list[get]
     this.list = [...this.list.splice(0, get), ...this.list.splice(get, this.list.length)]
 
+    console.log(q)
+    console.log(this.list)
+
     this.game.result = 'next'
     this.game.round = 0
     this.game.state = true
-    this.game.hint = q.h
-    this.game.word = q.a.split('')
-    this.game.ans = '_'.repeat(q.a.length).split('')
+    this.game.hint = q['h']
+    this.game.word = q['a'].split('')
+    this.game.ans = '_'.repeat(q['a'].length).split('')
     this.game.wrongGuessed = []
     this.game.maxWrong = q.a.length + Math.floor(Math.random() * Math.floor(6))
 
@@ -79,13 +82,13 @@ class GameSession {
   }
 
   getLeftGuess () {
-      return this.game.maxWrong - this.game.round
+    return this.game.maxWrong - this.game.round
   }
 
   checkAnswer () {
     let count = 0
     this.game.ans.forEach(a => {
-      console.log(a)
+    //   console.log(a)
       if (a !== '_') count++
     })
     if (count === this.game.word.length) return true
@@ -110,7 +113,7 @@ class GameSession {
     const found = this.game.word.find(a => a.toLowerCase() === alphabet.toLowerCase())
     const position = this.game.word.indexOf(found)
     this.game.round++
-    console.log('--->', found)
+    // console.log('--->', found)
     if (found) {
     //   console.log('ccccc')
       this.score++
@@ -127,7 +130,6 @@ class GameSession {
         if (this.score > 0) this.score--
         this.game.wrongGuessed.push(alphabet)
       }
-      //   if (this.game.wrongGuessed.length === this.game.maxWrong) this.game.state = false
     }
     this.setSessionState()
     return this.game.maxWrong - this.game.wrongGuessed.length
@@ -138,7 +140,6 @@ async function main () {
   const data = await loadFileGame()
   const wordlists = new Wordlists(data)
   let gameSession
-  //   console.log(wordlists.getQuestionList(0))
 
   async function selectCategory () {
     return inquirer.prompt([
@@ -150,9 +151,11 @@ async function main () {
       }
     ]).then(ans => {
       const cid = wordlists.categories.findIndex(s => s.name === ans.categories)
-      inquirer.registerPrompt('answer', ans)
+      //   inquirer.registerPrompt('answer', ans)
+      return cid
+    //   console.log(gameSession)
+    }).then(cid => {
       gameSession = new GameSession(wordlists.getQuestionList(cid))
-      console.log(gameSession)
     })
   }
   async function getNewQuestion () {
@@ -161,13 +164,13 @@ async function main () {
         type: 'input',
         name: 'answer',
         message: `
-        hint : ${gameSession.getHint()}
         your guess ${gameSession.getNewQuestion()}
+        hint : ${gameSession.getHint()}
         you have ${gameSession.getLeftGuess()} tries
         `
       }
     ]).then(ans => {
-      console.log(ans)
+    //   console.log(ans)
       return gameSession.answer(ans.answer)
     })
   }
@@ -177,13 +180,13 @@ async function main () {
         type: 'input',
         name: 'answer',
         message: `
-        hint : ${gameSession.getHint()}
         your guess ${gameSession.getQuestion()} wrong guessed : ${gameSession.getWrongGuessed()}
+        hint : ${gameSession.getHint()}
         you have ${gameSession.getLeftGuess()} tries
         `
       }
     ]).then(ans => {
-      console.log('ane--->', ans)
+    //   console.log('ane--->', ans)
       return gameSession.answer(ans.answer)
     })
   }
@@ -221,21 +224,20 @@ async function main () {
   }
   while (!next.exit) {
     if (next.newCategory) {
-      console.log('select new cat')
+    //   console.log('select new cat')
       await selectCategory()
     }
     await getNewQuestion()
     while (gameSession.game.result === 'next') {
       await getQuestion()
-      console.log(gameSession)
+    //   console.log(gameSession)
     }
     if (gameSession.game.result === 'win') console.log('you win !')
     else console.log('try next')
     next = await nextGame()
-    console.log(next)
+    // console.log(next)
   }
-//   console.log(next)
-//   console.log(gameSession)
+  console.log('bye ~')
 }
 
 main()
