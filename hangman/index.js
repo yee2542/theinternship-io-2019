@@ -63,6 +63,17 @@ class GameSession {
     this.game.wrongGuessed = []
     this.game.maxWrong = q.a.length + Math.floor(Math.random() * Math.floor(6))
 
+    const hint = () => {
+      const ranInt = Math.floor(Math.random() * this.game.word.length)
+      this.game.ans[ranInt] = this.game.word[ranInt]
+      this.game.word[ranInt] = '-'
+    }
+    let hintWord = this.game.word.length
+    while (hintWord > 0) {
+      hint()
+      hintWord = Math.floor(hintWord / 5)
+    }
+
     return this.game.ans
   }
 
