@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": " ",
-  "scripts": {
-    "start" : "node index.js"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/yee2542/theinternship-io-2019.git"
